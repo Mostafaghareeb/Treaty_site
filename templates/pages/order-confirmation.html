@@ -1,0 +1,36 @@
+{% extends "../base.html" %}
+{% load static %}
+{% block title %}Treaty - order confirmation{% endblock %}
+{% block content %}
+
+    <!-- Main Content -->
+    <main class="min-h-screen w-full max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-sm p-8">
+            <!-- Success Animation -->
+            <div class="flex justify-center mb-8">
+                <div class="relative">
+                  <svg class="w-24 h-24 stroke-2 stroke-white stroke-miter-10 rounded-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="stroke-green-400 fill-none animate-stroke" cx="26" cy="26" r="25" />
+                    <path class="stroke-green-400 fill-none animate-check" d="M16 26l6 6 14-14" />
+                  </svg>
+                </div>
+              </div>
+
+            <!-- Success Message -->
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">Order Confirmed!</h1>
+                <p class="text-gray-600">Thank you for your purchase. Your order has been successfully placed.</p>
+            </div>
+
+
+            <!-- Action Buttons -->
+            <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                <a href="{% url "index" %}#shop"
+                    class="flex-1 bg-pink-600 text-white px-6 py-3 rounded-lg text-center font-medium hover:bg-pink-700 transition-colors duration-200">
+                    Continue Shopping
+                </a>
+            </div>
+        </div>
+    </main>
+
+    {% endblock %}

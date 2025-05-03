@@ -1,0 +1,298 @@
+{% extends "../base.html" %}
+{% load static %}
+{% block title %}Treaty{% endblock %}
+{% block content %}
+    
+    <!-- Hero Section -->
+    <section class="xx pt-24 pb-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-pink-100 to-white" id="home">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-900 mb-4">Handcrafted
+                        Donuts Made
+                        Fresh Daily</h1>
+                    <p class="text-base sm:text-lg text-gray-600 mb-6">Indulge in our artisanal donuts, made with love
+                        and the finest
+                        ingredients</p>
+                    <a href="{% url 'index' %}#shop"
+                        class="bg-pink-600 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-full hover:bg-pink-700 transition duration-300">Shop
+                        Now</a>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="{% static 'images/donuts.jpg' %}" alt="Colorful Donuts" class="rounded-lg shadow-xl" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <section class="py-12" id="shop">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Our Products</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for product in products %}
+
+                {% if product.status == 'active' %}
+                    <!-- Active Product -->
+                    <form method="POST" action="{% url 'add_to_cart' product.id %}" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300 product-card group">
+                        {% csrf_token %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy"
+                            class="w-full h-64 object-cover">
+                        <div class="pt-4 pb-1 px-4">
+                            <h3 class="text-lg font-semibold text-gray-900 group-hover:text-black">
+                                {{ product.name }}</h3>
+                            <p class="text-gray-600">LE {{ product.price }} EGP</p>
+                            <div class="py-4">
+                                <button type="submit"
+                                    class="add-to-cart w-full bg-pink-600 text-white py-2 rounded-full hover:bg-pink-700 transition duration-300 cursor-pointer"
+                                    data-product="{{ product.name }}"
+                                    data-price="{{ product.price }}"
+                                    data-image="{{ product.image.url }}"
+                                    data-id="{{ product.id }}">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+            
+                {% elif product.status == 'sold_out' %}
+                    <!-- Sold Out -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden relative group product-card">
+                        <div class="relative">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy"
+                                class="w-full h-64 object-cover opacity-60">
+                            <div class="absolute inset-0 bg-opacity-40 flex items-center justify-center">
+                                <span class="text-white text-3xl font-bold">Sold Out</span>
+                            </div>
+                        </div>
+                        <div class="pt-4 pb-1 px-4">
+                            <h3 class="text-lg font-semibold text-gray-400">{{ product.name }}</h3>
+                            <p class="text-gray-400 line-through">LE {{ product.price }} EGP</p>
+                            <div class="py-4">
+                                <button type="submit" class="w-full bg-gray-400 text-white py-2 rounded-full cursor-not-allowed" disabled>
+                                    Out of Stock
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+            
+                {% elif product.status == 'comingsoon' %}
+                    <!-- Coming Soon -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden relative group transition duration-300 product-card">
+                        <div class="relative">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy"
+                                class="w-full h-64 object-cover opacity-70">
+                            <div class="absolute top-2 left-2 bg-pink-600 text-white text-xs font-bold px-2 py-1 rounded">
+                                Coming Soon
+                            </div>
+                        </div>
+                        <div class="pt-4 pb-1 px-4">
+                            <h3 class="text-lg font-semibold text-gray-500 group-hover:text-gray-600">{{ product.name }}</h3>
+                            <p class="text-gray-400">LE {{ product.price }} EGP</p>
+                            <div class="py-4">
+                                <button type="submit"
+                                    class="w-full bg-yellow-400 text-white py-2 rounded-full cursor-not-allowed"
+                                    disabled
+                                    data-product="{{ product.name }}"
+                                    data-price="{{ product.price }}"
+                                    data-image="{{ product.image.url }}"
+                                    data-id="{{ product.id }}">
+                                    Coming Soon
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+            
+                {% elif product.status == 'on_sale' %}
+                    <!-- On Sale -->
+                    <form method="POST" action="{% url 'add_to_cart' product.id %}" class="bg-white rounded-lg shadow-md overflow-hidden relative group product-card hover:shadow-xl transition duration-300">
+                        {% csrf_token %}
+                        <div class="relative">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy"
+                                class="w-full h-64 object-cover">
+                            <div class="absolute top-2 left-2 bg-pink-600 text-white text-xs font-bold px-2 py-1 rounded">
+                                SALE
+                            </div>
+                        </div>
+                        <div class="pt-4 pb-1 px-4">
+                            <h3 class="text-lg font-semibold text-gray-900">{{ product.name }}</h3>
+                            <div class="flex items-center space-x-2">
+                                <p class="text-gray-400 line-through text-sm">LE {{ product.price }} EGP</p>
+                                <p class="text-gray-700 font-bold text-base">LE {{ product.new_price }} EGP</p>
+                            </div>
+                            <div class="py-4">
+                                <button type="submit"
+                                    class="add-to-cart cursor-pointer w-full bg-pink-600 text-white py-2 rounded-full hover:bg-pink-600 transition duration-300"
+                                    data-product="{{ product.name }}"
+                                    data-price="{{ product.price }}"
+                                    data-image="{{ product.image.url }}"
+                                    data-id="{{ product.id }}">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    
+
+                {% elif product.status == 'new' %}
+                    <!-- New Product -->
+                    <form method="POST" action="{% url 'add_to_cart' product.id %}" class="bg-white rounded-lg shadow-md overflow-hidden relative group product-card hover:shadow-xl transition duration-300">
+                        {% csrf_token %}
+                        <div class="relative">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy"
+                                class="w-full h-64 object-cover">
+                            <div class="absolute top-2 left-2 bg-pink-600 text-white text-xs font-bold px-2 py-1 rounded">
+                                NEW
+                            </div>
+                        </div>
+                        <div class="pt-4 pb-1 px-4">
+                            <h3 class="text-lg font-semibold text-gray-900">{{ product.name }}</h3>
+                            <p class="text-gray-700">LE {{ product.price }} EGP</p>
+                            <div class="py-4">
+                                <button type="submit"
+                                    class="add-to-cart cursor-pointer w-full bg-pink-600 text-white py-2 rounded-full hover:bg-pink-700 transition duration-300"
+                                    data-product="{{ product.name }}"
+                                    data-price="{{ product.price }}"
+                                    data-image="{{ product.image.url }}"
+                                    data-id="{{ product.id }}">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    
+            
+                {% elif product.status == 'best_seler' %}
+                    <!-- Best Seller -->
+                    <form method="POST" action="{% url 'add_to_cart' product.id %}" class="bg-white rounded-lg shadow-md overflow-hidden relative group product-card hover:shadow-xl transition duration-300 border-2 border-pink-600">
+                        {% csrf_token %}
+                        <div class="relative">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy"
+                                class="w-full h-64 object-cover">
+                            <div class="absolute top-2 left-2 bg-pink-600 text-white text-xs font-bold px-2 py-1 rounded">
+                                Best Seller
+                            </div>
+                        </div>
+                        <div class="pt-4 pb-1 px-4">
+                            <h3 class="text-lg font-semibold text-gray-900">{{ product.name }}</h3>
+                            <p class="text-gray-800">LE {{ product.price }} EGP</p>
+                            <div class="py-4">
+                                <button type="submit"
+                                    class="add-to-cart cursor-pointer w-full bg-pink-600 text-white py-2 rounded-full hover:bg-pink-600 transition duration-300"
+                                    data-product="{{ product.name }}"
+                                    data-price="{{ product.price }}"
+                                    data-image="{{ product.image.url }}"
+                                    data-id="{{ product.id }}">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    
+            
+                {% endif %}
+            
+            {% endfor %}
+            
+
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us -->
+    <section class="py-12 bg-white" id="about">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">About Us</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">At Treaty, we believe in creating moments of joy through our
+                    handcrafted artisanal donuts. Each donut is made fresh daily with premium ingpinki6nts and a whole
+                    lot of love.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                <div class="text-center">
+                    <div class="bg-pink-100 rounded-full p-6 w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-10 h-10 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Fresh Daily</h3>
+                    <p class="text-gray-600">Baked fresh every morning for the perfect taste</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-pink-100 rounded-full p-6 w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-10 h-10 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Made with Love</h3>
+                    <p class="text-gray-600">Crafted with passion and attention to detail</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-pink-100 rounded-full p-6 w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-10 h-10 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Quality Ingredients</h3>
+                    <p class="text-gray-600">Only the finest ingredients make it into our donuts</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Us -->
+    <section class="py-12 bg-pink-100" id="contact">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Contact Us</h2>
+                <p class="text-gray-600">We'd love to hear from you!</p>
+            </div>
+            <div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <form method="POST" class="space-y-4">
+                        {% csrf_token %}
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-gray-700 mb-2">First Name</label>
+                                {{contact_form.first_name}}
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Last Name</label>
+                                {{contact_form.last_name}}
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2">Email</label>
+                            {{contact_form.email}}
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2">Comment</label>
+                            {{contact_form.comment}}
+                        </div>
+                        <button type="submit" name="contact_submit"
+                            class="w-full bg-pink-600 text-white py-2 rounded-md hover:bg-pink-700 transition duration-300 cursor-pointer">Send
+                            Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 text-center py-4 border-t border-pink-400">
+        <p>&copy; 2025, Treaty <a href="https://www.facebook.com/share/1BNWyPJNgL/"
+                class="hover:text-pink-400">Developed by Mostafa</a></p>
+    </footer>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/index.js' %}"></script>
+    <script src="{% static 'js/collections.js' %}"></script>
+    <script src="{% static 'js/cart.js' %}"></script>
+{% endblock %}
+
