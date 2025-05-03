@@ -13,7 +13,6 @@ def index(request):
 
     context = {
         'contact_form': ContactForm(),
-        
         'products': Product.objects.all(),
     }
 
