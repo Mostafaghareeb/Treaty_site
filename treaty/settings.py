@@ -90,12 +90,8 @@ WSGI_APPLICATION = 'treaty.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'treatydb',
-        'USER': 'mostafa',
-        'PASSWORD': 'Sasa1234',
-        'HOST': 'mostafa.mysql.pythonanywhere-services.com',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',  
+        'NAME': BASE_DIR / 'db.sqlite3',         
     }
 }
 
